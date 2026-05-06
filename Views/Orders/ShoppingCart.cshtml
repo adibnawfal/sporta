@@ -1,0 +1,126 @@
+﻿@using Sporta.Data.ViewModels;
+@model ShoppingCartVM
+
+@{
+    ViewData["Title"] = "Cart";
+}
+
+<section>
+    <div class="row m-0 p-5">
+        <div class="col-8 p-0 me-4 pe-3">
+            <p class="fs-4 fw-bold m-0 mb-3">My Cart</p>
+            <div class="border-top border-2 pt-3">
+                @foreach (var item in Model.ShoppingCart.ShoppingCartItems)
+                {
+                    <div class="row align-items-center border-bottom border-2 pb-3 m-0 mb-3">                      
+                        <div class="d-flex overflow-hidden col-md-auto rounded-4 bg-secondary-subtle p-0 me-3" style="width: 100px; height: 100px;">
+                            <img src="@item.Product.Picture2" class="flex-grow-1 rounded-4" style="object-fit: cover" alt="@item.Product.Name" />
+                        </div>
+                        <div class="col p-0">
+                            <p class="fs-5 fw-bold m-0">@item.Product.Name</p>
+                            <p class="m-0">Size: UK 9</p>
+                        </div>
+                        <div class="col text-center p-0">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <a asp-controller="Orders" asp-action="RemoveItemFromShoppingCart" asp-route-id="@item.Product.Id" class="border border-end-0 border-2 rounded-start-4 px-4 py-2 text-reset text-decoration-none">
+                                    <i class="fa-solid fa-minus fa-sm"></i>
+                                </a>
+                                <p class="border border-2 fw-bold p-0 m-0 px-4 py-2">@item.Quantity</p>
+                                <a asp-controller="Orders" asp-action="AddItemToShoppingCart" asp-route-id="@item.Product.Id" class="border border-start-0 border-2 rounded-end-4 px-4 py-2 text-reset text-decoration-none">
+                                    <i class="fa-solid fa-plus fa-sm"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col text-end p-0">
+                            <p class="fs-5 fw-bold m-0">Total</p>
+                            <p class="m-0">@((item.Quantity * item.Product.Price).ToString("c"))</p>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex">
+                    <div class="me-3" style="width: 100px;"></div>
+                    @* <p class="fw-bold m-0">Count Items</p> *@
+                </div>
+                <p class="fs-5 fw-bold m-0">@Model.ShoppingCartTotal.ToString("c")</p>
+            </div>
+        </div>
+        <div class="col p-0">
+            <p class="fs-4 fw-bold m-0">Summary</p>
+            <div class="d-flex border border-2 rounded-4 my-3">
+                <input placeholder="Promo Code" class="form-control fw-semibold border-0 rounded-4 ps-4" />
+                <button class="btn fw-semibold bg-black text-white rounded-4 px-5" style="font-size: 0.9rem">Submit</button>
+            </div>
+            <div class="d-flex justify-content-between mb-1">
+                <p class="m-0">Subtotal</p>
+                <p class="m-0">@Model.ShoppingCartTotal.ToString("c")</p>
+            </div>
+            <div class="d-flex justify-content-between mb-1">
+                <p class="m-0">Delivery Charges</p>
+                <p class="m-0">RM14.00</p>
+            </div>
+            <div class="d-flex justify-content-between border-bottom border-2 pb-3 mb-3">
+                <p class="m-0">Discount</p>
+                <p class="m-0">-RM0.00</p>
+            </div>
+            <div class="d-flex justify-content-between align-items-end mb-3">
+                <p class="fw-bold m-0">Total Payment</p>
+                <p class="fw-bold m-0">RM<span class="fs-4">@((Model.ShoppingCartTotal + 14).ToString()).00</span></p>
+            </div>
+            <a asp-action="CompleteOrder"
+               class="btn fw-semibold bg-black text-white rounded-4 px-5 py-2"
+               role="Button"
+               style="font-size: 0.9rem">Confirm</a>
+            @* <div id="paypal-btn"></div> *@
+        </div>
+    </div>
+</section>
+
+@* @section Scripts{
+
+    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+
+    <script>
+
+        let _total = @Html.Raw(Model.ShoppingCartTotal);
+
+        paypal.Button.render({
+            //Configure environment
+            env: 'sandbox',
+            client: {
+                sandbox: 'AcKRtgL4i68EZ2ZYuYUx3ilihAg2YhL5dtF_m19A8MjBWVOn6ewNS4M_uV8gA3xi98zTcUq38gUHbVFx'
+            },
+
+            //Customize button
+            locale: 'en_US',
+            style: {
+                size: 'small',
+                color: 'gold',
+                shape: 'pill'
+            },
+            commit: true,
+
+            //Set up a payment
+            payment: function (data, actions) {
+                return actions.payment.create({
+                    transactions: [{
+                        amount: {
+                            total: _total,
+                            currency: 'USD'
+                        }
+                    }]
+                });
+            },
+
+            //Execute the payment
+            onAuthorize: function (data, actions) {
+                return actions.payment.execute().then(function () {
+                    var url = '@Url.Action("CompleteOrder", "Orders", new { })';
+                    window.location.href = url;
+                });
+            }
+
+        }, '#paypal-btn')
+    </script>
+} *@

@@ -1,0 +1,11 @@
+﻿@model int;
+
+@if (Model > 0)
+{    
+    <div>
+        <a asp-controller="Orders" asp-action="AddItemToShoppingCart" class="position-relative text-reset text-decoration-none me-4">
+            <i class="fa-solid fa-bag-shopping fa-xl"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style="font-size: 0.6rem">@Model</span>
+        </a>
+    </div>
+}

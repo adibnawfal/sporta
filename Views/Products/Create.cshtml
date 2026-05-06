@@ -1,0 +1,179 @@
+﻿@model NewProductVM
+@using Sporta.Data;
+ 
+@{
+    ViewData["Title"] = "Add New Product";
+}
+
+<section>
+    <div class="row m-0 p-5">
+        <div class="col-4 p-0 me-4 pe-3">
+            <p class="fs-4 fw-bold m-0 mb-4">Update Product</p>
+            <form asp-action="Create" class="d-flex flex-column flex-grow-1 justify-content-between">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group mb-3">
+                    <label asp-for="Name" class="control-label mb-2"></label>
+                    <input asp-for="Name" class="form-control rounded-4" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="ProductCategory" class="control-label mb-2"></label>
+                    <select asp-for="ProductCategory" class="form-control rounded-4" asp-items="Html.GetEnumSelectList<ProductCategory>()"></select>
+                    <span asp-validation-for="ProductCategory" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Price" class="control-label mb-2"></label>
+                    <input asp-for="Price" type="number" class="form-control rounded-4" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Description" class="control-label mb-2"></label>
+                    <textarea asp-for="Description" class="form-control rounded-4" rows="6" style="resize: none"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Color" class="control-label mb-2"></label>
+                    <input asp-for="Color" class="form-control rounded-4" />
+                    <span asp-validation-for="Color" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Style" class="control-label mb-2"></label>
+                    <input asp-for="Style" class="form-control rounded-4" />
+                    <span asp-validation-for="Style" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Picture1" class="control-label mb-2"></label>
+                    <input asp-for="Picture1" class="form-control rounded-4" />
+                    <span asp-validation-for="Picture1" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Picture2" class="control-label mb-2"></label>
+                    <input asp-for="Picture2" class="form-control rounded-4" />
+                    <span asp-validation-for="Picture2" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Picture3" class="control-label mb-2"></label>
+                    <input asp-for="Picture3" class="form-control rounded-4" />
+                    <span asp-validation-for="Picture3" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Picture4" class="control-label mb-2"></label>
+                    <input asp-for="Picture4" class="form-control rounded-4" />
+                    <span asp-validation-for="Picture4" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Picture5" class="control-label mb-2"></label>
+                    <input asp-for="Picture5" class="form-control rounded-4" />
+                    <span asp-validation-for="Picture5" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-4">
+                    <label asp-for="Picture6" class="control-label mb-2"></label>
+                    <input asp-for="Picture6" class="form-control rounded-4" />
+                    <span asp-validation-for="Picture6" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <input type="submit" value="Create"
+                           class="btn fw-semibold bg-black text-white rounded-4 py-2"
+                           style="width: 180px; font-size: 0.9rem" />
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <a asp-controller="Products"
+                           asp-action="Index"
+                           class="btn btn-outline-dark border-2 rounded-4 fw-semibold py-2"
+                           role="Button"
+                           style="width: 180px; font-size: 0.9rem">Cancel</a>
+                    }
+                </div>
+            </form>
+        </div>
+        <div class="col p-0">
+            <p class="fs-4 fw-bold m-0 mb-4">Product Picture</p>
+            <div class="row row-cols-3 overflow-hidden gx-4 gy-4">
+                <div class="col d-flex overflow-hidden mx-0" style="height: 400px">
+                    <img class="flex-grow-1" style="object-fit: cover" id="Picture1Preview" />
+                </div>
+                <div class="col d-flex overflow-hidden mx-0" style="height: 400px">
+                    <img class="flex-grow-1" style="object-fit: cover" id="Picture2Preview" />
+                </div>
+                <div class="col d-flex overflow-hidden mx-0" style="height: 400px">
+                    <img class="flex-grow-1" style="object-fit: cover" id="Picture3Preview" />
+                </div>
+                <div class="col d-flex overflow-hidden mx-0" style="height: 400px">
+                    <img class="flex-grow-1" style="object-fit: cover" id="Picture4Preview" />
+                </div>
+                <div class="col d-flex overflow-hidden mx-0" style="height: 400px">
+                    <img class="flex-grow-1" style="object-fit: cover" id="Picture5Preview" />
+                </div>
+                <div class="col d-flex overflow-hidden mx-0" style="height: 400px">
+                    <img class="flex-grow-1" style="object-fit: cover" id="Picture6Preview" />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var output = document.getElementById("Picture1Preview");
+            output.src = $("#Picture1").val();
+        });
+
+        $(document).ready(function () {
+            var output = document.getElementById("Picture2Preview");
+            output.src = $("#Picture2").val();
+        });
+
+        $(document).ready(function () {
+            var output = document.getElementById("Picture3Preview");
+            output.src = $("#Picture3").val();
+        });
+
+        $(document).ready(function () {
+            var output = document.getElementById("Picture4Preview");
+            output.src = $("#Picture4").val();
+        });
+
+        $(document).ready(function () {
+            var output = document.getElementById("Picture5Preview");
+            output.src = $("#Picture5").val();
+        });
+
+        $(document).ready(function () {
+            var output = document.getElementById("Picture6Preview");
+            output.src = $("#Picture6").val();
+        });
+
+        $("#Picture1").on("change", function () {
+            var output = document.getElementById("Picture1Preview");
+            output.src = $(this).val();
+        })
+
+        $("#Picture2").on("change", function () {
+            var output = document.getElementById("Picture2Preview");
+            output.src = $(this).val();
+        })
+
+        $("#Picture3").on("change", function () {
+            var output = document.getElementById("Picture3Preview");
+            output.src = $(this).val();
+        })
+
+        $("#Picture4").on("change", function () {
+            var output = document.getElementById("Picture4Preview");
+            output.src = $(this).val();
+        })
+
+        $("#Picture5").on("change", function () {
+            var output = document.getElementById("Picture5Preview");
+            output.src = $(this).val();
+        })
+
+        $("#Picture6").on("change", function () {
+            var output = document.getElementById("Picture6Preview");
+            output.src = $(this).val();
+        })
+    </script>
+}

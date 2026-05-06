@@ -1,0 +1,10 @@
+﻿@model string;
+
+@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+    <a asp-controller="@Model"
+       asp-action="Create"
+       class="btn btn-outline-dark border-2 rounded-4 d-flex align-items-center fw-semibold px-3 py-2"
+       role="Button"
+       style="font-size: 0.9rem;">Add New Product</a>
+}

@@ -1,0 +1,54 @@
+﻿@model List<Order>
+
+@{
+    ViewData["Title"] = "All Orders";
+}
+
+<section class="align-items-center">
+    <div class="p-5 w-50">
+        <p class="fs-4 fw-bold text-center m-0 mb-4">All Orders</p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col" class="table-dark">Order ID</th>
+                    <th scope="col" class="table-dark">Items</th>
+                    <th scope="col" class="table-dark text-center">Total</th>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <th scope="col" class="table-dark text-center">User</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td class="align-middle">@order.Id</td>
+                        <td class="pt-3">
+                            @foreach (var item in order.OrderItems)
+                            {
+                                <div class="d-flex align-items-center m-0 mb-2">
+                                    <div class="d-flex col-md-auto rounded-4 bg-secondary-subtle p-0 me-3" style="width: 100px; height: 100px;">
+                                        <img src="@item.Product.Picture2" class="flex-grow-1 rounded-4" style="object-fit: cover" alt="@item.Product.Name" />
+                                    </div>
+                                    <div class="p-0">
+                                        <p class="fs-5 fw-bold m-0">@item.Product.Name</p>
+                                        <p class="m-0">Size: UK 9</p>
+                                        <p class="m-0">Quantity: @item.Quantity</p>
+                                    </div>                                
+                                </div>
+                            }
+                        </td>
+                        <td class="text-center align-middle">
+                            @order.OrderItems.Select(m => m.Product.Price * m.Quantity).Sum().ToString("c")
+                        </td>
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                            <td class="text-center align-middle">@order.User.FullName</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
